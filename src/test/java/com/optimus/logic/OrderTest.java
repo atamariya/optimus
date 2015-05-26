@@ -10,15 +10,15 @@ import java.util.List;
 import org.junit.Test;
 
 import com.optimus.api.Order;
-import com.optimus.api.OrderCombineStrategy;
 import com.optimus.api.OrderItem;
+import com.optimus.api.base.CombineStrategy;
 
 public class OrderTest {
 
 	@Test
 	public final void testCombine() {
-		OrderCombineStrategy orderCombineStrategy = new OrderCombineStrategyImpl();
-		Order order = orderCombineStrategy.combine(null);
+		CombineStrategy<Order> orderCombineStrategy = new OrderCombineStrategyImpl();
+		Order order = orderCombineStrategy.execute(null);
 		assertEquals("Nothing to combine - output null", null, order);
 		
 		List<Order> orders = new ArrayList<Order>();
@@ -27,14 +27,14 @@ public class OrderTest {
 		orders.add(orderFactory.createOrder());
 		
 		// Single order is returned
-		orderCombineStrategy.setOrderFactory(orderFactory);
-		order = orderCombineStrategy.combine(orders);
+		orderCombineStrategy.setFactory(orderFactory);
+		order = orderCombineStrategy.execute(orders);
 		assertTrue("Single order is returned", order != null);
 		
 		// Multiple SOs will be combined to create a PO. PO creation should take care of MOQ.
 		orderCombineStrategy = new CombineSOToCreatePO();
-		orderCombineStrategy.setOrderFactory(new PurchaseOrderFactory());
-		order = orderCombineStrategy.combine(orders);
+		orderCombineStrategy.setFactory(new PurchaseOrderFactory());
+		order = orderCombineStrategy.execute(orders);
 		assertTrue("Returned instance should be PO", order instanceof PurchaseOrder);
 		
 		/* Guest and user orders can be combined. If no shipping address is present in guest
