@@ -3,22 +3,31 @@ package com.optimus.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import jdk.nashorn.internal.objects.annotations.Setter;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.optimus.api.base.Criteria;
 import com.optimus.api.base.SelectStrategy;
 
 public class SelectCombinationTest {
+	private List<Participant> list;
+	
+	@Test
+	public void testRandomSelection() {
+
+		SelectStrategy<Participant> selectStrategy = new SelectCombination<Participant>();
+		List<Participant> out = selectStrategy.execute(list,
+				new RandomSelector<Participant>(), 1);
+
+		Assert.assertEquals("Two elements are selected.", 1, out.size());
+		System.out.println(out);
+	}
+	
 	@Test
 	public void testTuples() {
-
-		int[][] data = { { 1, 30, 50 }, { 2, 40, 60 }, { 3, 35, 45 } };
-		List<Participant> list = new ArrayList<Participant>();
-		for (int i = 0; i < data.length; i++) {
-			list.add(new Participant(data[i][0], data[i][1], data[i][2]));
-
-		}
 
 		SelectStrategy<Participant> selectStrategy = new SelectCombination<Participant>();
 		List<Participant> out = selectStrategy.execute(list,
@@ -37,6 +46,16 @@ public class SelectCombinationTest {
 		Assert.assertEquals("Two elements are selected.", 2, out.size());
 		System.out.println(out);
 
+	}
+
+	@Before
+	public void setup() {
+		int[][] data = { { 1, 30, 50 }, { 2, 40, 60 }, { 3, 35, 45 } };
+		list = new ArrayList<Participant>();
+		for (int i = 0; i < data.length; i++) {
+			list.add(new Participant(data[i][0], data[i][1], data[i][2]));
+
+		}
 	}
 
 }

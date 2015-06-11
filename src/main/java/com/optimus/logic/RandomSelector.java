@@ -2,13 +2,12 @@ package com.optimus.logic;
 
 import java.util.List;
 
-import com.optimus.api.base.SelectStrategy;
+import com.optimus.api.base.Criteria;
 
-public class RandomSelector<T> implements SelectStrategy<T> {
+public class RandomSelector<T> implements Criteria<T> {
 
-	public T execute(List<T> objects) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean evaluate(List<T> list) {
+		return Math.random() > 0.5;
 	}
 
 }
