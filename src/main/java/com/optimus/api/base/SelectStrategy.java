@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface SelectStrategy<T> {
 
-	List<T> execute(List<T> objects, Criteria<T> criteria);
+	List<T> execute(List<T> objects, Criteria<T> criteria, int returnSize);
 	
 }
